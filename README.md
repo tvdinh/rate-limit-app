@@ -1,9 +1,9 @@
 # rate-limit-app
-A webservice with request throttling enabled.
+A webservice with request throttling enabled using rate limiting strategy.
 
 # Overview
 
-This is a webservice module that responds to client's greeting requests with request throtlling enabled. The request throtlling is in the form of a rate limiter defined by two configurable parameters: `TIME-DURATION` and `VOLUME`. The rate limiter ensures that there are no more than `VOLUME` number of requests are served within the last `TIME-DURATION` period by the downstream service. For example, if `TIME-DURATION = 3600s` and `VOLUME = 100`, the rate limiter allows only 100 requests per hour, exceeding requests will result in a HTTP 429 Too Many Request response from the server. 
+This is a webservice module that responds to client's greeting requests with request throtlling enabled. The request throtlling is in the form of a rate limiter defined by two configurable parameters: `TIME-DURATION` and `VOLUME`. The rate limiter ensures that there are no more than `VOLUME` number of requests are served within the last `TIME-DURATION` period. For example, if `TIME-DURATION = 3600s` and `VOLUME = 100`, the rate limiter allows only 100 requests per hour, exceeding requests will result in a HTTP 429 Too Many Request response from the server. 
 
 Exposing HTTP method: `GET /hello`. Port: `8080`.
 
@@ -27,7 +27,7 @@ where `x` is the remmaining time until the throttling is lifted.
 
 ## Bash
 
-### Runtime prequisite: 
+### Runtime prerequisite: 
 
 * Java 11.
 
@@ -58,7 +58,7 @@ starts the module with the applied rate limit of 5 requests per minute.
 
 A language agnostic deployment method is also provided using Docker (e.g Java is not available):
 
-* First build the service dockerised image:
+* First build the service docker image:
 
 ```
 docker build -t rate-limiter-app:latest .
@@ -83,7 +83,7 @@ And send 4 consecutive http requests with `curl` client
 * 1:
 
 ```
-date; curl http://localhost:/hello
+date; curl http://localhost:8080/hello
 ```
 
 Got:
@@ -96,7 +96,7 @@ Hello Airtasker! Received at 2021-08-15T08:10:15
 * 2:
 
 ```
-date; curl http://localhost:/hello
+date; curl http://localhost:8080/hello
 ```
 
 Got:
@@ -109,7 +109,7 @@ Hello Airtasker! Received at 2021-08-15T08:10:16
 * 3:
 
 ```
-date; curl http://localhost:/hello
+date; curl http://localhost:8080/hello
 ```
 
 Got:
@@ -122,7 +122,7 @@ Hello Airtasker! Received at 2021-08-15T08:10:18
 * 4: 
 
 ```
-date; curl -v http://localhost:/hello
+date; curl http://localhost:8080/hello
 ```
 
 Got:
@@ -157,7 +157,7 @@ So far, the module has been described in a language agnostic manner, that is hid
 
 # Implementation
 
-This section explains some key part of implementation of rate limiter. It uses Domain Specific Language terms and framework notations (e.g Java and SpringBoot).
+This section explains some key parts of implementation of rate limiter. It uses Domain Specific Language terms and framework notations (e.g Java and SpringBoot).
 
 * `WebController`
 
@@ -184,18 +184,18 @@ The module is first of all a webservice that serves a HTTP request via endpoint 
     }
 ```
 
-The logic is rather simple: once the controller receives a request, it calls the `requestThrottler` passing on the timestamp when the request is received. The `requestThrottler` returns an `Optional` of a wait value. If that `Optional` is empty hence, or no need to wait, then it goes ahead and serves the request. Otherwise it returns a HTTP 429 response indicating how long the requestor must wait until the next request is accepted.
+The logic is rather simple: once the controller receives a request, it calls the `requestThrottler` passing on the timestamp when the request is received. The `requestThrottler` returns an `Optional` of a wait value. If that `Optional` is empty, hence no need to wait, then it goes ahead and serves the request. Otherwise it returns a HTTP 429 response indicating how long the requestor must wait until the next request is accepted.
 
 * `LocalCacheRateLimiter`
 
-The `requestThrottler` is an instance of a `LocalCacheRateLimiter` that implements `RequestThrotller` with the following method:
+The `requestThrottler` is an instance of a `LocalCacheRateLimiter` that implements `RequestThrotller` with the following interface:
 
 ```
 public Optional<Long> handleRequest(LocalDateTime timestamp);
 ```
-As the name suggests, the `LocalCacheRateLimiter` keeps an in-memory `Deque<LocalDateTime>` which is basically a queue with easy access to the head and the tail, this queue basically stores the timestamps of the last `VOLUME` requests, with the latest on tail. 
+As the name suggests, the `LocalCacheRateLimiter` keeps an in-memory `Deque<LocalDateTime>` which is basically a queue with easy access to the head and the tail. This queue basically stores the timestamps of the last `VOLUME` requests, with the latest on tail. 
 
-```
+```java
   @Override
   public Optional<Long> handleRequest(LocalDateTime currentTimestamp) {
     if(requestHistory.size() < volume) {
@@ -239,11 +239,11 @@ Should that be the case, the module can expose another method e.g `GET /throttle
 
 ## Limitations
 
-- The Rate Limiter uses an in-memory cache to keep track of past request timestamps. If the application is crashed and restarted (which is common for microservices), the cache is gone hence may not work correctly afterwards. To remedy this point, a remote cache (memcache) or a centralised database can be used. A centralised cache can also be useful in case the service is deployed with multiple instances (e.g auto-scaling). Using in-memory cache then will result in each cache per instance, hence unexpected behaviours if the load is not distributed uniformly. Note that even though in-memory cache is used, memory utilisation is not a big concern here as the cache size is a constant (size <= VOLUME).
+- The Rate Limiter uses an in-memory cache to keep track of past request timestamps. If the application is crashed and restarted (which is common for microservices), the cache is gone hence it may not work correctly afterwards. To remedy this point, a remote cache (memcache) or a centralised database can be used. A centralised cache can also be useful in case the service is deployed with multiple instances (e.g auto-scaling). Using in-memory cache then will result in each cache per instance, hence unexpected behaviours if the load is not distributed uniformly. Note that even though in-memory cache is used, memory utilisation is not a big concern here as the cache size is a constant (size <= VOLUME).
 
 - The current rate limiter is designed for throttling requests for the entire application not per endpoint. Normally, a webservice serves many endpoints, and it can be useful that the rate limiter can distinguish endpoints too (e.g `/hello` and `/hi`). However, this is not a complex enhancement, i.e we can add another interface `EndpointRequestThrottler` which a method that passes in the endpoint too:
 
-```
+```java
 Optional<Long> handleRequest(String endpoint, LocalDateTime timestamp);
 ```
 
