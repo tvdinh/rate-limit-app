@@ -1,0 +1,31 @@
+The file includes my answers to the questions on Airtasker's culture and values.
+
+Q: Our mission is to empower people to realise the full value of their skills. What is your interpretation of this? Why is this important to you? What do you think this looks like for Airtasker?
+
+A: I believe everyone has something to offer for the better of our communities, everyone has a special skill set that they can contribute. But sometimes, people do not know where their skills are needed and valued, and people who need a service do not know where to look for help. One of Airtasker's missions, from understanding, is to create the bridges between the two groups of people. These bridges not only create productivity and opportunities in the economy but also help bring the communities closer together, and that is important to me. That makes me feel that I want to be a part of it.
+Q: These are our values. Please advise on your interpretation of these values. What does this look like for you personally and also as an Engineer?
+Stay open
+We are open and transparent. We set big goals and then work together to find the solution.
+Fit for purpose
+We build for purpose, we always ask “why” and don’t embellish.
+People matter
+We value individuals and believe people are far more than a means to an end.
+When it’s on it’s on
+We push hard when we need to, play hard as a team and celebrate hard when we win.
+Own it
+We each own our ideas and our happiness. We always speak up.
+
+A: Stay open: 
+Staying open to new ideas, new streams of thought,  and accepting changes and adapting to them are the key to success. This value is extremely important to me as an engineer especially in the software engineering discipline where new technologies and new ways of doing things emerge every day. Business environment uncertainty is the part of every industry and the one who quickly adapts to it will have the edge. And staying open is a key principle to it.
+
+Fit for purpose:
+My interpretation of this value is to focus on what really matters, sticking with the goals for each and every task, staying with the true value and the substance of what to offer, not to compromise a bad product with less relevant things that can be depreciated quickly. I consider this as an alignment to my engineering principles too. When deciding to pursue a goal, we have always started with the "why" question, and keep those targets in mind through the process. It's sometimes easy to be deviated from the origin targets, or when a decision is made the original targets are not taken into account. This leads to low-productivity, less efficiency, and loss.
+
+People matter: 
+I think there's probably no or very little controversy on this value. After all, Airtasker's mission is to realise people's potential and help them to contribute more to the economy and discover themselves. I'm not surprised that it is also a key value of the company which I am 100% on board with. From an engineer's point of view and my experience of leading others, individuals at the end are what you count for. Yes, processes and guidelines are extremely important, and a productive team can't work without them, but you rely on people, teammates when it matters most. Each team member brings in a fresh perspective to the team, and in tough times, you need people to bring in new ideas, new ways of tackling a problem.
+
+When it’s on it’s on: 
+My interpretation of this value is to keep pushing the boundaries, try to build or offer the best possible products you can. 
+
+Own it:
+I believe that accountability is the key to a productive environment everywhere. From the engineer's point of view, I consider this is a part that no team can compromise. Yes, we set targets, and we work towards them as a team, we are transparent to each other and to ourselves, and no one knows everything and can participate in all the risks, but for the team to move forward, it needs each individual to do their share. A great leader is one who can facilitate this process and make their team members comfortable to take on a task, knowing someone is always watching their back.
